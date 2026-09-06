@@ -424,10 +424,24 @@ def _fig2_closure_vs_rate(rates_bps, probs, targets, baseline_rate):
     plt.close(fig)
 
 
+#: Display labels for the sensitivity-contribution figure only -- the
+#: underlying parameter keys (used everywhere else: printed reports,
+#: dataframes, uncertainty.UncertaintyModel field names) are unchanged.
+PARAMETER_DISPLAY_LABELS = {
+    "tx_power_w": "Transmit power",
+    "tx_gain_dbi": "Spacecraft transmit gain",
+    "rx_gain_dbi": "Ground receive gain",
+    "excess_pointing_loss_db": "Pointing loss",
+    "misc_loss_db": "Miscellaneous loss",
+    "tsys_k": "System noise temperature",
+    "required_ebn0_db": r"Required $E_b/N_0$",
+}
+
+
 def _fig3_sensitivity_bar(shares, contributions):
     fig, ax = plt.subplots(figsize=(7.5, 5))
     items = sorted(shares.items(), key=lambda kv: kv[1])
-    names = [n for n, _ in items]
+    names = [PARAMETER_DISPLAY_LABELS.get(n, n) for n, _ in items]
     vals = [v for _, v in items]
     bars = ax.barh(names, vals, color="tab:blue")
     for bar, (name, v) in zip(bars, items):

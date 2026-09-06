@@ -30,6 +30,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.ticker as mticker  # noqa: E402
 import numpy as np  # noqa: E402
 
 from baseline_scenario import build_baseline  # noqa: E402
@@ -81,12 +82,37 @@ def main() -> None:
     ax1.set_title(f"FSPL verification at {freq_mhz:.0f} MHz")
     ax1.grid(True, which="both", alpha=0.3)
 
-    ax2.plot(ranges_km, fspl_diff * 1e3, color="firebrick")
+    # Residual in millidB, computed explicitly (not just reused from fspl_diff)
+    # so the plotted quantity is unambiguous: library minus independent
+    # reference, in mdB. The result is essentially constant with range
+    # (~-2.217 mdB) -- it is not numerical noise, it is the rounding of the
+    # independent reference's 32.45 constant (see docs/verification.md).
+    # Matplotlib's default offset/scientific-notation y-axis formatter would
+    # otherwise render this as a near-unreadable "1e-11 - 2.216778116"
+    # label; disable it and fix a sensible y-range around the true value
+    # instead so the ~2.217 mdB result reads directly off the axis.
+    delta_fspl_mdb = 1000.0 * fspl_diff
+    mean_residual_mdb = float(np.mean(delta_fspl_mdb))
+
+    ax2.plot(ranges_km, delta_fspl_mdb, color="firebrick", lw=1.5)
+    ax2.axhline(mean_residual_mdb, color="black", lw=1, linestyle="--",
+                label=f"Mean = {mean_residual_mdb:+.3f} mdB")
     ax2.set_xlabel("Slant range (km, log scale)")
-    ax2.set_ylabel("Difference (mdB)")
+    ax2.set_ylabel("FSPL difference (mdB)\n(library − independent reference)")
     ax2.set_xscale("log")
+    ax2.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False))
+    pad = 0.02
+    ax2.set_ylim(mean_residual_mdb - pad, mean_residual_mdb + pad)
     ax2.grid(True, which="both", alpha=0.3)
+    ax2.legend(loc="upper right", fontsize=8)
     ax2.set_title("Library minus independent reference")
+    ax2.annotate(
+        "Nearly constant offset: rounding of the reference\nformula's 32.45 dB constant, not numerical error.\n"
+        f"Max |discrepancy| = {max_abs_diff_mdb:.3f} mdB (<< 0.01 dB).",
+        xy=(0.02, 0.04), xycoords="axes fraction", fontsize=8,
+        va="bottom", ha="left",
+        bbox=dict(boxstyle="round", facecolor="white", edgecolor="gray", alpha=0.9),
+    )
 
     fig.tight_layout()
     fig.savefig(RESULTS_DIR / "verification_fspl_vs_range.png", dpi=150)
