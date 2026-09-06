@@ -1,0 +1,14 @@
+,value
+Tx power (dBW),6.020599913279624
+EIRP (dBW),26.520599913279625
+Free-space path loss (dB),223.0437024744403
+Total path loss (dB),223.8437024744403
+Rx antenna gain (dBi),57.0
+G/T (dB/K),38.918487496163564
+Received power (dBW),-140.82310256116068
+Noise PSD N0 (dBW/Hz),-210.81765466938123
+C/N0 (dB-Hz),69.99455210822055
+"Eb/N0, actual (dB)",6.984252151580733
+"Eb/N0, required (dB)",4.5
+Implementation loss (dB),1.0
+Link margin (dB),1.4842521515807334
