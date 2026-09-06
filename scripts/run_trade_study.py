@@ -136,7 +136,6 @@ def main() -> None:
     for label, p in [("0 dB", required_power_0db), ("+1 dB", required_power_1db), ("+3 dB", required_power_3db)]:
         print(f"  Required Tx power for {label} margin: {p:.3f} W ({10*math.log10(p):+.2f} dBW)")
 
-    power_sweep = sweep_transmit_power(baseline, np.linspace(0.5, 12.0, 24))
     doubled = sweep_transmit_power(baseline, [baseline.transmitter.power_w, 2 * baseline.transmitter.power_w])
     delta_2x = doubled.margin_db[1] - doubled.margin_db[0]
     print(f"Doubling Tx power ({baseline.transmitter.power_w:.1f} W -> "

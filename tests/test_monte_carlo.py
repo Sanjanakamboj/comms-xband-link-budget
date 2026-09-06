@@ -15,7 +15,7 @@ from xband_link.monte_carlo import (
     variance_contribution_shares,
     wilson_confidence_interval,
 )
-from xband_link.uncertainty import UncertainParameter, UncertaintyModel, default_uncertainty_model
+from xband_link.uncertainty import UncertaintyModel, default_uncertainty_model
 
 
 def _baseline() -> LinkBudget:
@@ -188,7 +188,6 @@ def test_closure_probability_monotonic_decreasing_in_range():
 
 def test_closure_probability_improves_with_transmit_power():
     link = _baseline()
-    model = default_uncertainty_model(link)
     probs = []
     for power_w in [1.0, 2.0, 4.0, 8.0]:
         trial = dataclasses.replace(link, transmitter=dataclasses.replace(link.transmitter, power_w=power_w))

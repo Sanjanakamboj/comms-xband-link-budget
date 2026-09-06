@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from xband_link.link_budget import Channel, LinkBudget, LinkRequirement, Receiver, Transmitter
-from xband_link.uncertainty import UncertainParameter, UncertaintyModel, default_uncertainty_model
+from xband_link.uncertainty import UncertainParameter, default_uncertainty_model
 
 
 def _baseline() -> LinkBudget:

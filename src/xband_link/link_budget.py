@@ -23,7 +23,7 @@ representing attenuation (a loss of 1.5 dB is written as ``1.5``, not
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import pandas as pd
 
@@ -31,7 +31,6 @@ from .conversions import dbhz_to_hz, hz_to_dbhz
 from .noise import (
     g_over_t_db,
     noise_power_spectral_density_dbw_hz,
-    system_noise_temperature,
 )
 from .propagation import free_space_path_loss_db
 

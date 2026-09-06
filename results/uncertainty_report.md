@@ -1,7 +1,7 @@
 # Milestone 3 Uncertainty & Closure-Probability Report
 
 Master seed: 42
-Baseline Monte Carlo: N = 10,000 samples, runtime = 0.42 ms
+Baseline Monte Carlo: N = 10,000 samples, runtime = 0.63 ms
 Total script runtime: 0.68 s
 
 Nominal (deterministic) worst-case margin: +1.484 dB
