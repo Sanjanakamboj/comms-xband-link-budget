@@ -150,3 +150,12 @@ Rb,max [bit/s]      = 10^(Eb/N0,allowed / 10)
 ```
 
 Implementation: `LinkBudget.max_data_rate_for_margin`.
+
+## 11. Milestone 2: additional inverse-design helpers and trade studies
+
+Milestone 2 adds three more closed-form inversions (required Tx power,
+required Tx gain, required Rx gain), a parabolic-dish aperture-gain model,
+and a vectorized trade-study layer built on top of the equations above —
+no new RF physics. See `docs/trade_study.md` for the full derivation,
+`src/xband_link/link_budget.py` (`LinkBudget.required_*_for_margin`
+methods), `src/xband_link/antennas.py`, and `src/xband_link/trades.py`.

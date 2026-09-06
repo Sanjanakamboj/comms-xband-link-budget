@@ -41,6 +41,15 @@ less pointing precision than Ka-band.
 | Required Eb/N0 | 4.5 dB | Representative of a rate-1/2 LDPC-coded BPSK/QPSK link at a low frame-error-rate operating point (CCSDS-style coded performance), with a small allowance folded in. |
 | Implementation loss | 1.0 dB | Standard allowance for modem/hardware implementation loss not otherwise itemized. |
 
+> **Milestone 2 note on the 57.0 dBi figure**: `src/xband_link/antennas.py`
+> now implements the aperture-gain formula referenced above as code. Evaluated
+> precisely for D = 12 m, f = 8.425 GHz, eta = 0.55, it gives **57.9 dBi**,
+> not 57.0 dBi. The baseline's `Receiver.antenna_gain_dbi = 57.0` was (and
+> remains) a deliberately rounded, slightly conservative direct input rather
+> than a value computed through this function — it is not a defect and the
+> Milestone 1 baseline numbers are unchanged. See `docs/trade_study.md` and
+> `tests/test_antennas.py` for the precise formula and its verification.
+
 ## Why this baseline (not a bigger/smaller one)
 
 The parameters above were deliberately tuned so the **worst-case-range

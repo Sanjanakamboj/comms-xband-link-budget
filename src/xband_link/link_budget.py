@@ -185,3 +185,36 @@ class LinkBudget:
         # margin = c_over_n0 - 10log10(Rb) - required_ebn0 - impl_loss - target_margin = 0
         allowed_ebn0_db = result.c_over_n0_dbhz - result.required_ebn0_db - result.implementation_loss_db - target_margin_db
         return float(dbhz_to_hz(allowed_ebn0_db))
+
+    # -- Closed-form inverse-design helpers -------------------------------
+    #
+    # Margin is linear in every dB-domain term of the link equation with a
+    # coefficient of exactly +1 for Pt[dBW], Gt[dBi], and Gr[dBi] (and -1 for
+    # any additional loss term). That means "what value of X closes the link
+    # with target margin M?" never needs a numerical root-find: shift the
+    # current value of X in the dB domain by
+    # (target_margin_db - current_margin_db) and the forward model reproduces
+    # the requested margin exactly. Each helper below is a one-line
+    # consequence of that linearity; docs/link_budget_equations.md derives it
+    # and tests/test_link_budget.py verifies the forward/inverse round trip.
+
+    def required_tx_power_w_for_margin(self, target_margin_db: float = 0.0) -> float:
+        """Transmit power [W] (all else fixed) that yields ``target_margin_db``."""
+        from .conversions import dbw_to_watts
+
+        current_margin_db = self.compute().margin_db
+        delta_db = target_margin_db - current_margin_db
+        required_power_dbw = self.transmitter.power_dbw + delta_db
+        return float(dbw_to_watts(required_power_dbw))
+
+    def required_tx_gain_dbi_for_margin(self, target_margin_db: float = 0.0) -> float:
+        """Spacecraft transmit antenna gain [dBi] (all else fixed) for ``target_margin_db``."""
+        current_margin_db = self.compute().margin_db
+        delta_db = target_margin_db - current_margin_db
+        return self.transmitter.antenna_gain_dbi + delta_db
+
+    def required_rx_gain_dbi_for_margin(self, target_margin_db: float = 0.0) -> float:
+        """Ground-station receive antenna gain [dBi] (all else fixed) for ``target_margin_db``."""
+        current_margin_db = self.compute().margin_db
+        delta_db = target_margin_db - current_margin_db
+        return self.receiver.antenna_gain_dbi + delta_db
