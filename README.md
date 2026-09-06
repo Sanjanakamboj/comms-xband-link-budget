@@ -278,4 +278,4 @@ interval correctness, and required-margin/variance-share consistency.
 
 ## License
 
-MIT (see `pyproject.toml`; no separate `LICENSE` file has been added yet).
+MIT — see [`LICENSE`](LICENSE).
